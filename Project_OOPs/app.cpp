@@ -92,6 +92,7 @@ public:
         AC_no = rendome_AC();
         C_no = rendome_Customer_no();
         ifsc_code = this->ifsc_code();
+        cin.ignore();
         cout << "Enter Account Holder Name : ";
         getline(cin, AC_holder_Name);
         cout << "Enter Date of birth (dd/mm/yyyy) : ";
@@ -274,7 +275,7 @@ public:
     }
 };
 
-class view_data
+class view_data : public create_Account
 {
 public:
     void search_account_data()
@@ -289,7 +290,7 @@ public:
         int count = 0;
         string input_value, document_no, AC_no, C_no, dob_input, dob;
         cout << "Enter the Account Number,Customer Number or Document Number to display details: ";
-
+        cin.ignore();
         getline(cin, input_value);
         cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
         getline(cin, dob_input);
@@ -388,7 +389,7 @@ public:
     }
 };
 
-class edit
+class edit : public view_data
 {
 public:
     void update_AC_record()
@@ -406,6 +407,7 @@ public:
         vector<string> row;
         string property, input_value, document_no, new_document_no, AC_no, C_no, dob_input, dob, line, word, newdetails, c;
         cout << "Enter the Account Number, Customer Number or Document Number to Update details: ";
+        cin.ignore();
         getline(cin, input_value);
         cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
         getline(cin, dob_input);
@@ -435,25 +437,25 @@ public:
             index = 4;
             // Get the new marks
             cout << "Enter New NAME : ";
-            cin >> newdetails;
+            getline(cin, newdetails);
         }
         else if (property == "2")
         {
             index = 5;
             cout << "Enter Date of birth : ";
-            cin >> newdetails;
+            getline(cin, newdetails);
         }
         else if (property == "3")
         {
             index = 6;
             cout << "Enter New Contect Number : ";
-            cin >> newdetails;
+            getline(cin, newdetails);
         }
         else if (property == "4")
         {
             index = 7;
             cout << "Enter New Mail ID : ";
-            cin >> newdetails;
+            getline(cin, newdetails);
         }
         else if (property == "5")
         {
@@ -609,7 +611,7 @@ public:
     }
 };
 
-class transact
+class transact : public edit
 {
 public:
     void withdrawal()
@@ -623,7 +625,7 @@ public:
 
         string AC_no_input, dob_input, contect_no_input, withdrawl_amount;
         int total_before, total_after;
-
+        cin.ignore();
         cout << "Enter the Account Number : ";
         getline(cin, AC_no_input);
         cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
@@ -736,7 +738,7 @@ public:
 
         string AC_no_input, ifsc_input, contect_no_input, deposite_amount;
         int total_after;
-
+        cin.ignore();
         cout << "Enter the Account Number : ";
         getline(cin, AC_no_input);
         cout << "Enter IFSC Code : ";
@@ -828,9 +830,38 @@ public:
         cout << "Your Total balance is : "
              << total_after << endl;
     }
+
+    int op()
+    {
+        do
+        {
+            int c;
+
+            cout << "1. Withdrawal" << endl
+                 << "2. Deposite" << endl
+                 << "0. Exit" << endl
+                 << "Enter Your Choise : ";
+            cin >> c;
+            switch (c)
+            {
+            case 1:
+                withdrawal();
+                break;
+            case 2:
+                diposite();
+                break;
+            case 3:
+                return 0;
+            default:
+                cout << endl
+                     << "Please Enter Right Choise" << endl;
+                break;
+            }
+        } while (true);
+    }
 };
 
-class erase
+class erase : public transact
 {
 public:
     void close_account()
@@ -854,7 +885,7 @@ public:
         string AC_no_input, dob_input, contect_no_input, line, word;
 
         vector<string> row;
-
+        cin.ignore();
         cout << "Enter the Account Number : ";
         getline(cin, AC_no_input);
         cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
@@ -936,19 +967,274 @@ public:
     }
 };
 
+class see : public erase
+{
+public:
+    void read_all_record()
+    {
+        // File pointer
+        fstream fin;
+
+        // Open an existing file
+        fin.open("Account_details.csv", ios::in);
+
+        vector<string> row;
+        string line, word, temp;
+
+        // Read each line from the file
+        while (getline(fin, line))
+        {
+
+            row.clear();
+
+            // used for breaking words
+            stringstream s(line);
+
+            while (getline(s, word, ','))
+            {
+                row.push_back(word);
+            }
+
+            // Print the found data
+            cout << row[0] << " | " << row[1] << " | " << row[2] << " | " << row[3] << " | " << row[4] << " | " << row[5] << " | " << row[6] << " | " << row[7] << " | " << row[8] << " | " << row[9] << " | " << row[10] << " | " << row[11] << " | " << row[12] << " | " << row[13] << " | " << row[14] << " | " << row[15] << " | " << row[16] << " | " << row[17] << " | " << row[18] << endl;
+        }
+        // Close the file
+        fin.close();
+    }
+    void Balance_chack()
+    {
+
+        // File pointer
+        fstream fin;
+
+        // Open an existing file
+        fin.open("Account_details.csv", ios::in);
+
+        int count = 0;
+        string input_value, document_no, AC_no, C_no, dob_input, dob;
+        cout << "Enter the Account Number,Customer Number or Document Number to display Account Balance: ";
+        cin.ignore();
+        getline(cin, input_value);
+        cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
+        getline(cin, dob_input);
+        removeSpaces(input_value);
+        for (char &c : input_value)
+        {
+            c = tolower(c);
+        }
+        for (char &c : dob_input)
+        {
+            c = tolower(c);
+        }
+
+        vector<string> row;
+        string line, word, temp;
+
+        // Read each line from the file
+        while (getline(fin, line))
+        {
+
+            row.clear();
+
+            // used for breaking words
+            stringstream s(line);
+
+            while (getline(s, word, ','))
+            {
+
+                row.push_back(word);
+            }
+
+            removeSpaces(row[1]); // account no.
+            removeSpaces(row[2]); // customer no.
+            removeSpaces(row[5]); // DOB
+            removeSpaces(row[9]); // document no.
+            for (char &c : row[9])
+            {
+                c = tolower(c);
+            }
+            AC_no = row[1];
+            C_no = row[2];
+            dob = row[5];
+            document_no = row[9];
+            if ((AC_no == input_value && dob == dob_input) || (C_no == input_value && dob == dob_input) || (document_no == input_value && dob == dob_input))
+            {
+                for (char &c : row[9])
+                {
+                    c = toupper(c);
+                }
+                // Print the found data
+                cout << endl
+                     << " | "
+                     << "TOTAL BALANCE : " << row[17] << endl
+                     << endl;
+                count = 1;
+            }
+        }
+        // Close the file
+        fin.close();
+
+        if (count == 0)
+            cout << "Record not Found\n"
+                 << "Please Enter Right Details\n";
+    }
+};
+
+int admin()
+{
+    see allobj;
+    string username, pass;
+    cout << endl
+         << " ﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋" << endl
+         << "︴Welcome to Bank Inventory System ︴" << endl
+         << " ﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏" << endl;
+
+    // name pass
+    cout << "Please Firstly Insert Admin name & Password" << endl;
+    cout << " Enter UserName : ";
+    cin.ignore();
+    getline(cin, username);
+    cout << " Enter Password : ";
+    getline(cin, pass);
+    if (username == "admin" && pass == "AUBI$2024")
+    {
+
+        int n;
+        cout << endl
+             << "*  You Are Successfully Login  *" << endl;
+        do
+        {
+            cout << endl
+                 << "1. Create New Account" << endl
+                 << "2. Search Account" << endl
+                 << "3. Update Detail" << endl
+                 << "4. Transact" << endl
+                 << "5. Delete Account" << endl
+                 << "6. See All Data" << endl
+                 << "0. Exit" << endl
+                 << "Enter Your Choice : ";
+            cin >> n;
+            cout << endl;
+            switch (n)
+            {
+            case 1:
+                allobj.create_Ac();
+                break;
+            case 2:
+                allobj.search_account_data();
+                break;
+            case 3:
+                allobj.update_AC_record();
+                break;
+            case 4:
+                allobj.op();
+                break;
+            case 5:
+                allobj.close_account();
+                break;
+            case 6:
+                allobj.read_all_record();
+                break;
+            case 0:
+                return 0;
+            default:
+                cout << "Please Enter Right Choice";
+                continue;
+            }
+        } while (true);
+    }
+    else
+    {
+        cout << "Please Enter Right USER NAME & PASSWORD";
+        admin();
+    }
+
+    return 0;
+}
+
+int customer()
+{
+    see allobj;
+    cout << endl
+         << " ﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋" << endl
+         << "︴Welcome to Bank Inventory System ︴" << endl
+         << " ﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏" << endl;
+
+    int n;
+    do
+    {
+        cout << endl
+             << "1. Create New Account" << endl
+             << "2. View Detail" << endl
+             << "3. Update Detail" << endl
+             << "4. Get My Balance" << endl
+             << "0. Exit" << endl
+             << "Enter Your Choice : ";
+        cin >> n;
+        cout << endl;
+        switch (n)
+        {
+        case 1:
+            allobj.create_Ac();
+            break;
+        case 2:
+            allobj.search_account_data();
+            break;
+        case 3:
+            allobj.update_AC_record();
+            break;
+        case 4:
+            allobj.Balance_chack();
+            break;
+        case 0:
+            return 0;
+        default:
+            cout << "Please Enter Right Choice";
+            continue;
+        }
+    } while (true);
+
+    return 0;
+}
+
 int main()
 {
-    // create_Account cAC;
-    // cAC.create_Ac();
-    // view_data vd;
-    // vd.search_account_data();
-    // edit edt;
-    // edt.update_AC_record();
-    // transact tr;
-    // tr.withdrawal();
-    // tr.diposite();
 
-    erase ers;
-    ers.close_account();
+    do
+    {
+        int c;
+
+        cout << "1. Admin" << endl
+             << "2. User" << endl
+             << "0. Exit" << endl
+             << "Enter Your Choise : ";
+        cin >> c;
+        switch (c)
+        {
+        case 1:
+            admin();
+            break;
+        case 2:
+            customer();
+            break;
+        case 0:
+            cout << endl
+                 << "Byy! I See You Again....";
+            cout << endl
+                 << "****************************************" << endl
+                 << "*              DEVELOPED BY            *" << endl
+                 << "*           ___________________        *" << endl
+                 << "*          | Aaditya Raj Singh |       *" << endl
+                 << "*           ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾        *" << endl
+                 << "*                THANKYOU              *" << endl
+                 << "****************************************" << endl;
+            return 0;
+        default:
+            cout << endl
+                 << "Please Enter Right Choise" << endl;
+            break;
+        }
+    } while (true);
+
     return 0;
 }
