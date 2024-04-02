@@ -1,0 +1,2 @@
+DATE_TIME , CUSTOMER_NO, ACCOUNT_NO, LOAN_ACCOUNT_NO, DOB       , NAME         , MOBILE, EMAIL                 , DOCUMENT    , document_no , Occupation, Nominee_Name   , Nominee_DOB, Nominee_relation, type_of_loan, loan_amount, Duration_of_loan, EMI    , LOAN_STATUS
+02/04/2024, 31567570   , 1431658084, 9876543207524  , 15/10/2005, HARDIK PATHAK,       , hardik.pathak@mail.com, Aadhaar card, 987456321789, student   , NARENDRA PATHAK, 16/07/1964 , FATHER          , Home Loans  , 1000000    , 40              , 28332.6, Loan Pass

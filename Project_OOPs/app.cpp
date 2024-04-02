@@ -1080,14 +1080,278 @@ public:
     }
 };
 
+class loan : public see
+{
+public:
+    void new_loan()
+    {
+        fstream fin_acc, fin_trans, fout_acc, fout_trans;
+
+        fin_acc.open("Account_details.csv", ios::in);
+        fin_trans.open("loan_details.csv", ios::in);
+        fout_trans.open("loan_details.csv", ios::app);
+
+        int AC_no, loan_AC_no;
+        float EMI, r;
+        string loan_Ac_open_date, AC_holder_Name, dob, contect_no, mail_ID, Documents, document_no, Occupation, Nominee_Name, Nominee_DOB, Nominee_relation, c, AC_no_input, dob_input, contect_no_input, type_of_loan, C_no, loan_amount, Duration_of_loan;
+
+        cin.ignore();
+        cout << "Enter the Current opened Account Number : ";
+        getline(cin, AC_no_input);
+        cout << "Enter Date of Birth  (dd/mm/yyyy) : ";
+        getline(cin, dob_input);
+        cout << "Enter Contect Number : ";
+        getline(cin, contect_no_input);
+
+        string line;
+        bool find = false;
+        // Update Account_details_in_loan_file.csv
+        while (getline(fin_acc, line))
+        {
+            vector<string> row;
+            stringstream s(line);
+            string word;
+            while (getline(s, word, ','))
+            {
+                row.push_back(word);
+            }
+
+            string AC_no = row[1];
+            C_no = row[2];
+            string dob = row[5];
+            string contect_no = row[6];
+            removeSpaces(AC_no);
+            removeSpaces(dob);
+            removeSpaces(contect_no);
+
+            if (AC_no == AC_no_input && dob == dob_input && contect_no == contect_no_input)
+            {
+                find = true;
+                cout << endl
+                     << "Account Details are find" << endl
+                     << "Please Enter bellow all details" << endl;
+                // Read the inputs
+                loan_Ac_open_date = todaydate();
+                loan_AC_no = rendome_AC();
+                cout << "Enter Account Holder Name : ";
+                getline(cin, AC_holder_Name);
+                cout << "Enter Date of birth (dd/mm/yyyy) : ";
+                getline(cin, dob);
+                cout << "Enter Contect Number : ";
+                getline(cin, contect_no);
+                cout << "Enter e-Mail ID : ";
+                getline(cin, mail_ID);
+
+                cout << "Enter Detail Verification Document : \n"
+                     << "\t1. Pan Card" << endl
+                     << "\t2. Passport" << endl
+                     << "\t3. Driving License" << endl
+                     << "\t4. Voter's ID" << endl
+                     << "\t5. Ration Card" << endl
+                     << "\t6. Aadhaar card" << endl
+                     << "Enter Your Choice : ";
+                getline(cin, c);
+                do
+                {
+                    if (c == "1")
+                    {
+                        Documents = "Pan Card";
+                        break;
+                    }
+                    else if (c == "2")
+                    {
+                        Documents = "Passport";
+                        break;
+                    }
+                    else if (c == "3")
+                    {
+                        Documents = "Driving License";
+                        break;
+                    }
+                    else if (c == "4")
+                    {
+                        Documents = "Voter's ID";
+                        break;
+                    }
+                    else if (c == "5")
+                    {
+                        Documents = "Ration Card";
+                        break;
+                    }
+                    else if (c == "6")
+                    {
+                        Documents = "Aadhaar card";
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Enter Rigth Choice" << endl;
+                    }
+
+                } while (true);
+
+                cout << "Enter Document Number : ";
+                getline(cin, document_no);
+
+                cout << "write Occupation :";
+                getline(cin, Occupation);
+
+                cout << "Nominee Name : ";
+                getline(cin, Nominee_Name);
+
+                cout << "Nominee Date of birth : ";
+                getline(cin, Nominee_DOB);
+
+                cout << "Nominee relation : ";
+                getline(cin, Nominee_relation);
+
+                cout << "How many Amount do you want : ";
+                getline(cin, loan_amount);
+
+                int loan_amount_int = stoi(loan_amount);
+
+                cout << "Enter Duration of loan (In months) : ";
+                getline(cin, Duration_of_loan);
+                int Duration_of_loan_int = stoi(Duration_of_loan);
+
+                cout
+                    << "Enter Type of loan : \n"
+                    << "\t1. Home Loans [7.5%]" << endl
+                    << "\t2. Education Loans[9.36%]" << endl
+                    << "\t3. Car/Auto Loans[9.50%]" << endl
+                    << "\t4. Personal Loans[13%]" << endl
+                    << "\t5. Business Loans[22.26%]" << endl
+                    << "\t6. Gold Loans [9.00%]" << endl
+                    << "Enter Your Choice : ";
+                getline(cin, c);
+                do
+                {
+                    if (c == "1")
+                    {
+                        type_of_loan = "Home Loans";
+                        r = 7.5 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else if (c == "2")
+                    {
+                        type_of_loan = "Education Loans";
+                        r = 9.36 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else if (c == "3")
+                    {
+                        type_of_loan = "Car/Auto Loans";
+                        r = 9.50 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else if (c == "4")
+                    {
+                        type_of_loan = "Personal Loans";
+                        r = 13 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else if (c == "5")
+                    {
+                        type_of_loan = "Business Loans";
+                        r = 22.26 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else if (c == "6")
+                    {
+                        type_of_loan = "Gold Loans";
+                        r = 9.00 / (12 * 100);
+                        EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Enter Rigth Choice" << endl;
+                    }
+
+                } while (true);
+            }
+        }
+
+        for (char &c : AC_holder_Name)
+        {
+            c = toupper(c);
+        }
+        for (char &c : document_no)
+        {
+            c = toupper(c);
+        }
+        for (char &c : Nominee_Name)
+        {
+            c = toupper(c);
+        }
+        for (char &c : Nominee_relation)
+        {
+            c = toupper(c);
+        }
+        bool pass = false;
+        // Update Account_details_in_loan_file.csv
+
+        if (find == true)
+        {
+            fout_trans << loan_Ac_open_date << ","
+                       << C_no << ","
+                       << AC_no << ","
+                       << "987654320" << loan_AC_no << ","
+                       << dob << ","
+                       << AC_holder_Name << "," // name
+                       << contect_no << ","
+                       << mail_ID << ","     // mail
+                       << Documents << ","   // document
+                       << document_no << "," // document_no
+                       << Occupation << ","
+                       << Nominee_Name << ","
+                       << Nominee_DOB << ","
+                       << Nominee_relation << ","
+                       << type_of_loan << ","
+                       << loan_amount << ","
+                       << Duration_of_loan << ","
+                       << EMI << ","
+                       << "Loan Pass"
+                       << ","
+                       << "\n";
+            pass = true;
+        }
+
+        fin_acc.close();
+        fout_acc.close();
+        fin_trans.close();
+        fout_trans.close();
+        if (pass == true)
+        {
+            cout << endl
+                 << "Your Loan is Pass Successfully!!!" << endl
+                 << "Your monthaly EMI is : " << EMI << endl
+                 << "Account Number is : 987654320" << loan_AC_no << endl
+                 << "Customer Number is : " << C_no << endl;
+        }
+        else
+        {
+            cout << "Account Not Found!!" << endl
+                 << "Please Enter rigth details";
+        }
+    }
+};
+
 int admin()
 {
-    see allobj;
+    loan allobj;
     string username, pass;
     cout << endl
-         << " ﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋" << endl
-         << "︴Welcome to Bank Inventory System ︴" << endl
-         << " ﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏" << endl;
+         << endl
+         << " ***********************************" << endl
+         << " * Welcome to Bank Inventory System *" << endl
+         << " ***********************************" << endl
+         << endl;
 
     // name pass
     cout << "Please Firstly Insert Admin name & Password" << endl;
@@ -1111,6 +1375,7 @@ int admin()
                  << "4. Transact" << endl
                  << "5. Delete Account" << endl
                  << "6. See All Data" << endl
+                 << "7. Apply Loan" << endl
                  << "0. Exit" << endl
                  << "Enter Your Choice : ";
             cin >> n;
@@ -1135,6 +1400,9 @@ int admin()
             case 6:
                 allobj.read_all_record();
                 break;
+            case 7:
+                allobj.new_loan();
+                break;
             case 0:
                 return 0;
             default:
@@ -1154,11 +1422,13 @@ int admin()
 
 int customer()
 {
-    see allobj;
+    loan allobj;
     cout << endl
-         << " ﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋﹋" << endl
-         << "︴Welcome to Bank Inventory System ︴" << endl
-         << " ﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏" << endl;
+         << endl
+         << " ***********************************" << endl
+         << " * Welcome to Bank Inventory System *" << endl
+         << " ***********************************" << endl
+         << endl;
 
     int n;
     do

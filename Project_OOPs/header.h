@@ -7,10 +7,11 @@
 #include <vector>   //create vector variable
 #include <cstdio>
 #include <algorithm> //remove space b/w string
-//#include <cstdlib>   //for denrate rendome A/C no.
+//#include <cstdlib>   //for genrate rendome A/C no.
 #include <ctime>     //for current time
 #include <thread>    // for pause program in some times
 #include <chrono>    //for pause program in some times
+#include <cmath> //calculate maths problem
 
 using namespace std;
 #endif
