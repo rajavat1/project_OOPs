@@ -273,6 +273,7 @@ public:
             cout << "\nYour Account is not open Successfully \n";
         }
     }
+
 };
 
 class view_data : public create_Account
@@ -387,6 +388,7 @@ public:
             cout << "Record not Found\n"
                  << "Please Enter Right Details\n";
     }
+
 };
 
 class edit : public view_data
@@ -428,7 +430,7 @@ public:
              << "[4] Mail ID" << endl
              << "[5] DOCUMENT" << endl
              << "[6] Address" << endl
-             << "Enter the Madicine Property : ";
+             << "Enter the Property : ";
         getline(cin, property);
 
         // Determine the index of the subject
@@ -609,6 +611,7 @@ public:
         else
             cout << "\nDetail Updated Successful\n";
     }
+
 };
 
 class transact : public edit
@@ -826,7 +829,7 @@ public:
             perror("Error renaming file");
         }
 
-        cout << "\nWithdrawal Successful\n";
+        cout << "\nDeposite Successful\n";
         cout << "Your Total balance is : "
              << total_after << endl;
     }
@@ -850,7 +853,7 @@ public:
             case 2:
                 diposite();
                 break;
-            case 3:
+            case 0:
                 return 0;
             default:
                 cout << endl
@@ -949,7 +952,7 @@ public:
         }
         else
         {
-            cout << "Operation Cancle";
+            cout << "Operation cancel";
         }
 
         fin.close();
@@ -965,6 +968,7 @@ public:
             perror("Error renaming file");
         }
     }
+
 };
 
 class see : public erase
@@ -1138,7 +1142,7 @@ public:
                 cout << "Enter Date of birth (dd/mm/yyyy) : ";
                 getline(cin, dob);
                 cout << "Enter Contect Number : ";
-                getline(cin, contect_no);
+                getline(cin, contect_no_input);
                 cout << "Enter e-Mail ID : ";
                 getline(cin, mail_ID);
 
@@ -1250,7 +1254,7 @@ public:
                     else if (c == "4")
                     {
                         type_of_loan = "Personal Loans";
-                        r = 13 / (12 * 100);
+                        r = 13.00 / (12 * 100);
                         EMI = (loan_amount_int * r * pow(1 + r, Duration_of_loan_int)) / (pow(1 + r, Duration_of_loan_int) - 1);
                         break;
                     }
@@ -1300,11 +1304,11 @@ public:
         {
             fout_trans << loan_Ac_open_date << ","
                        << C_no << ","
-                       << AC_no << ","
+                       << AC_no_input << ","
                        << "987654320" << loan_AC_no << ","
-                       << dob << ","
+                       << dob_input << ","
                        << AC_holder_Name << "," // name
-                       << contect_no << ","
+                       << contect_no_input << ","
                        << mail_ID << ","     // mail
                        << Documents << ","   // document
                        << document_no << "," // document_no
@@ -1340,6 +1344,7 @@ public:
                  << "Please Enter rigth details";
         }
     }
+
 };
 
 int admin()
