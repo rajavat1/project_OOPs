@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <ctime>     //for current time
 #include <cmath> //calculate maths problem
+#include <conio.h> //_getch()
 
 using namespace std;
 #endif
