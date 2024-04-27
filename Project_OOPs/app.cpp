@@ -30,6 +30,78 @@ int randome_price()
     int ren_price = 15 + rand() % 99;
     return ren_price;
 }
+class validation
+{
+public:
+    // validate the Enter name is not a intiger
+    bool hasInteger(const string &str)
+    {
+        for (char c : str)
+        {
+            if (isdigit(c))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // validate the enter DOB formate
+    bool isValidDateOfBirthFormat(const string &dob)
+    {
+        // Check if the length of the input string is exactly 10 characters
+        if (dob.length() != 10)
+            return false;
+
+        // Check if the positions of '/' are correct
+        if (dob[2] != '/' || dob[5] != '/')
+            return false;
+
+        // Extract day, month, and year from the input string
+        int day, month, year;
+        stringstream ss(dob);
+        char slash;
+        ss >> day >> slash >> month >> slash >> year;
+
+        // Check if the extraction was successful and values are within valid ranges
+        if (ss.fail() || ss.bad())
+            return false;
+
+        if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31)
+            return false;
+
+        // Additional checks for specific month lengths
+        if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
+            return false;
+
+        if (month == 2)
+        {
+            bool leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+            if ((leapYear && day > 29) || (!leapYear && day > 28))
+                return false;
+        }
+
+        // If all checks pass, return true
+        return true;
+    }
+
+    // mobile number
+    bool isValidMobilenumber(const string &mobile)
+    {
+
+        if (mobile.length() != 10)
+            return false;
+        for (char c : mobile)
+        {
+            if (isdigit(c))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 struct Address
 {
     string citizenship;
@@ -49,7 +121,7 @@ string datetime()
 }
 // utility functions end
 // create account class
-class create_Account
+class create_Account : public validation
 {
 public:
     int rendome_AC()
@@ -93,10 +165,38 @@ public:
         C_no = rendome_Customer_no();
         ifsc_code = this->ifsc_code();
         cin.ignore();
-        cout << "Enter Account Holder Name : ";
-        getline(cin, AC_holder_Name);
-        cout << "Enter Date of birth (dd/mm/yyyy) : ";
-        getline(cin, dob);
+        do
+        {
+            cout << "Enter Account Holder Name : ";
+            getline(cin, AC_holder_Name);
+
+            if (hasInteger(AC_holder_Name))
+            {
+                cout << endl
+                     << "Account Holder Name Is Not a Number Value || Please Enter Right Name" << endl;
+            }
+            else
+            {
+                break;
+            }
+        } while (true);
+
+        do
+        {
+            cout << "Enter Date of birth (dd/mm/yyyy) : ";
+            getline(cin, dob);
+
+            if (!isValidDateOfBirthFormat(dob))
+            {
+                cout << endl
+                     << "Date Of Birth is Wrong || Please enter in DD/MM/YYYY format." << endl;
+            }
+            else
+            {
+                break;
+            }
+        } while (true);
+
         cout << "Enter Contect Number : ";
         getline(cin, contect_no);
         cout << "Enter e-Mail ID : ";
@@ -273,7 +373,6 @@ public:
             cout << "\nYour Account is not open Successfully \n";
         }
     }
-
 };
 
 class view_data : public create_Account
@@ -388,7 +487,6 @@ public:
             cout << "Record not Found\n"
                  << "Please Enter Right Details\n";
     }
-
 };
 
 class edit : public view_data
@@ -611,7 +709,6 @@ public:
         else
             cout << "\nDetail Updated Successful\n";
     }
-
 };
 
 class transact : public edit
@@ -968,7 +1065,6 @@ public:
             perror("Error renaming file");
         }
     }
-
 };
 
 class see : public erase
@@ -1344,7 +1440,6 @@ public:
                  << "Please Enter rigth details";
         }
     }
-
 };
 
 int admin()
