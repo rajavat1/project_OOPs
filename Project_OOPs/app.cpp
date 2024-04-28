@@ -38,7 +38,7 @@ public:
     {
         for (char c : str)
         {
-            if (isdigit(c))
+            if (!isalpha(c))
             {
                 return true;
             }
@@ -1144,12 +1144,6 @@ public:
         getline(cin, dob_input);
         cout << "Enter Contect Number : ";
         getline(cin, contect_no_input);
-        cout << "Enter Withdrawal Amount : ";
-        getline(cin, withdrawl_amount);
-
-        int withdrawl_amount1 = stoi(withdrawl_amount);
-
-        // Current date and time
 
         string line;
         bool account_updated = false, balance = false;
@@ -1178,6 +1172,17 @@ public:
 
             if (AC_no == AC_no_input && dob == dob_input && contect_no == contect_no_input)
             {
+
+                cout << endl
+                     << "---| Account Details are find |---" << endl
+                     << endl;
+
+                cout << "Enter Withdrawal Amount : ";
+                getline(cin, withdrawl_amount);
+                int withdrawl_amount1;
+                stringstream convert(withdrawl_amount);
+                convert >> withdrawl_amount1;
+
                 account_updated = true;
                 if (total >= withdrawl_amount1)
                 {
@@ -1263,10 +1268,6 @@ public:
 
         cout << "Enter Contect Number : ";
         getline(cin, contect_no_input);
-        cout << "Enter Deposite Amount : ";
-        getline(cin, deposite_amount);
-
-        int deposite_amount1 = stoi(deposite_amount);
 
         string line;
         bool account_updated = false;
@@ -1294,6 +1295,18 @@ public:
 
             if (AC_no == AC_no_input && ifsc == ifsc_input && contect_no == contect_no_input)
             {
+
+                cout << endl
+                     << "---| Account Details are find |---" << endl
+                     << endl;
+
+                cout << "Enter Deposite Amount : ";
+                getline(cin, deposite_amount);
+
+                int deposite_amount1;
+                stringstream convert(deposite_amount);
+                convert >> deposite_amount1;
+
                 account_updated = true;
                 total += deposite_amount1;
                 row[17] = to_string(total);
@@ -1640,27 +1653,79 @@ public:
             {
                 find = true;
                 cout << endl
-                     << "Account Details are find" << endl
-                     << "Please Enter bellow all details" << endl;
+                     << "---| Account Details are find |---" << endl
+                     << "---| Please Enter below all Details |---" << endl;
                 // Read the inputs
                 loan_Ac_open_date = todaydate();
                 loan_AC_no = rendome_AC();
-                cout << "Enter Account Holder Name : ";
-                getline(cin, AC_holder_Name);
-                cout << "Enter Date of birth (dd/mm/yyyy) : ";
-                getline(cin, dob);
-                cout << "Enter Contect Number : ";
-                getline(cin, contect_no_input);
-                cout << "Enter e-Mail ID : ";
-                getline(cin, mail_ID);
+                do
+                {
+                    cout << "Enter Account Holder Name : ";
+                    getline(cin, AC_holder_Name);
+
+                    if (hasInteger(AC_holder_Name))
+                    {
+                        cout << endl
+                             << "Account Holder Name Is Not a Number Value || Please Enter Right Name" << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+
+                do
+                {
+                    cout << "Enter Date of birth (dd/mm/yyyy) : ";
+                    getline(cin, dob);
+
+                    if (!isValidDateOfBirthFormat(dob))
+                    {
+                        cout << endl
+                             << "Date Of Birth is Wrong || Please enter in DD/MM/YYYY format." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+
+                do
+                {
+                    cout << "Enter Contect Number : ";
+                    getline(cin, contect_no_input);
+
+                    if (!isValidMobilenumber(contect_no_input))
+                    {
+                        cout << endl
+                             << "Mobile Number is Wrong || Please enter 10 digit mobile number." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+                do
+                {
+                    cout << "Enter e-Mail ID : ";
+                    getline(cin, mail_ID);
+
+                    if (isValidEmail(mail_ID))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        cout << endl
+                             << "Invalid email address || Please Enter Valid Email Address" << endl;
+                    }
+                } while (true);
 
                 cout << "Enter Detail Verification Document : \n"
                      << "\t1. Pan Card" << endl
                      << "\t2. Passport" << endl
-
-                     << "\t4. Voter's ID" << endl
-                     << "\t5. Ration Card" << endl
-                     << "\t6. Aadhaar card" << endl
+                     << "\t3. Voter's ID" << endl
+                     << "\t4. Aadhaar card" << endl
                      << "Enter Your Choice : ";
                 getline(cin, c);
                 do
@@ -1668,31 +1733,110 @@ public:
                     if (c == "1")
                     {
                         Documents = "Pan Card";
+                        string panNumber;
+                        do
+                        {
+                            cout << "Enter Pan Card Number : ";
+                            getline(cin, panNumber);
+                            for (char &c : panNumber)
+                            {
+                                c = toupper(c);
+                            }
+                            if (isvalidpannumber(panNumber))
+                            {
+                                document_no = panNumber;
+                                break;
+                            }
+                            else
+                            {
+                                cout << endl
+                                     << "Invalid PAN Number || Please Enter Valid PAN number" << endl;
+                            }
+                        } while (true);
+
                         break;
                     }
                     else if (c == "2")
                     {
                         Documents = "Passport";
+                        string passportNumber;
+
+                        do
+                        {
+                            cout << "Enter Indian Passport Number : ";
+                            getline(cin, passportNumber);
+                            for (char &c : passportNumber)
+                            {
+                                c = toupper(c);
+                            }
+                            if (isvalidpassportNumber(passportNumber))
+                            {
+                                document_no = passportNumber;
+                                break;
+                            }
+                            else
+                            {
+                                cout << endl
+                                     << "Invalid Passport Number || Please Enter Valid Passport number" << endl;
+                            }
+                        } while (true);
+
                         break;
                     }
                     else if (c == "3")
                     {
+                        Documents = "Voter's ID";
+
+                        string voterId;
+
+                        do
+                        {
+                            cout << "Enter Voter Card Number (Voter ID) : ";
+                            getline(cin, voterId);
+                            for (char &c : voterId)
+                            {
+                                c = toupper(c);
+                            }
+                            if (isvalidVoternumber(voterId))
+                            {
+                                document_no = voterId;
+                                break;
+                            }
+                            else
+                            {
+                                cout << endl
+                                     << "Invalid Voter ID || Please Enter Valid Voter ID" << endl;
+                            }
+                        } while (true);
 
                         break;
                     }
+
                     else if (c == "4")
                     {
-                        Documents = "Voter's ID";
-                        break;
-                    }
-                    else if (c == "5")
-                    {
-                        Documents = "Ration Card";
-                        break;
-                    }
-                    else if (c == "6")
-                    {
                         Documents = "Aadhaar card";
+
+                        string aadharNumber;
+                        do
+                        {
+                            cout << "Enter Voter Card Number (Voter ID) : ";
+                            getline(cin, aadharNumber);
+                            for (char &c : aadharNumber)
+                            {
+                                c = toupper(c);
+                            }
+                            if (isvalidAadharnumber(aadharNumber))
+                            {
+                                document_no = aadharNumber;
+                                break;
+                            }
+                            else
+                            {
+                                cout << endl
+                                     << "Invalid aadhar number || Please Enter Valid 12 digit aadhar number" << endl;
+                            }
+                        } while (true);
+
                         break;
                     }
                     else
@@ -1702,17 +1846,43 @@ public:
 
                 } while (true);
 
-                cout << "Enter Document Number : ";
-                getline(cin, document_no);
+                // cout << "Enter Document Number : ";
+                // getline(cin, document_no);
 
                 cout << "write Occupation :";
                 getline(cin, Occupation);
 
-                cout << "Nominee Name : ";
-                getline(cin, Nominee_Name);
+                do
+                {
+                    cout << "Nominee Name : ";
+                    getline(cin, Nominee_Name);
 
-                cout << "Nominee Date of birth : ";
-                getline(cin, Nominee_DOB);
+                    if (hasInteger(Nominee_Name))
+                    {
+                        cout << endl
+                             << "Account Holder Name Is Not a Number Value || Please Enter Right Name" << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+
+                do
+                {
+                    cout << "Enter Nominee Date of birth (dd/mm/yyyy) : ";
+                    getline(cin, Nominee_DOB);
+
+                    if (!isValidDateOfBirthFormat(Nominee_DOB))
+                    {
+                        cout << endl
+                             << "Date Of Birth is Wrong || Please enter in DD/MM/YYYY format." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
 
                 cout << "Nominee relation : ";
                 getline(cin, Nominee_relation);
